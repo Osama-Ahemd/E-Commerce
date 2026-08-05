@@ -17,7 +17,7 @@ public class Order
     public string ShippingAddress { get; set; } = string.Empty;
     public DateTime OrderDate { get; set; }
 
-    public int UserId { get; set; }
+    public string UserId { get; set; } = string.Empty;
     public User User { get; set; } = null!;
 
     public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();

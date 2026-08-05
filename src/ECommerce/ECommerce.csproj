@@ -4,30 +4,30 @@
 		<TargetFramework>net10.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<UserSecretsId>60f7d628-2098-4cab-bdcf-bf1900426515</UserSecretsId>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Content Remove="Data\SeedData\Data.json" />
-	  <Content Remove="Data\SeedData\products.json" />
+		<Content Remove="Data\SeedData\Data.json" />
+		<Content Remove="Data\SeedData\products.json" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Include="Data\SeedData\Data.json">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </EmbeddedResource>
+		<EmbeddedResource Include="Data\SeedData\Data.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</EmbeddedResource>
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.10" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.10" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.10" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.10">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="Controllers\" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.10" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.10" />
 	</ItemGroup>
 
 </Project>

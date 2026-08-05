@@ -39,7 +39,7 @@ public static class DataSeeder
             context.Products.Add(new Product
             {
                 Name = p.Name,
-                Description = p.Description,
+                Description = p.Description ?? string.Empty,
                 Price = p.Price,
                 Stock = p.Stock,
                 Category = idMap[p.CategoryId]

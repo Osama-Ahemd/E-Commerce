@@ -14,16 +14,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .IsRequired()
             .HasMaxLength(100);
 
-        builder.Property(u => u.Email)
-            .IsRequired()
-            .HasMaxLength(100);
-
-        builder.HasIndex(u => u.Email)
-            .IsUnique();
-
-        builder.Property(u => u.PasswordHasher)
-            .IsRequired();
-
         builder.Property(u => u.Role)
             .IsRequired()
             .HasConversion<string>()
