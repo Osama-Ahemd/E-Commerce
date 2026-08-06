@@ -1,5 +1,7 @@
+using ECommerce.Data.Models;
 using ECommerce.Dtos;
 using ECommerce.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Controllers
@@ -13,7 +15,7 @@ namespace ECommerce.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterDto model)
         {
-            var result = await _authService.RegisterAsync(model);
+            var result = await _authService.RegisterAsync(model, UserRole.Customer);
             if (!result.Succeeded) return BadRequest(result.Errors);
             return Ok();
         }
@@ -24,6 +26,15 @@ namespace ECommerce.Controllers
             var token = await _authService.LoginAsync(model);
             if (token == null) return Unauthorized();
             return Ok(new { token });
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("admin/create-admin")]
+        public async Task<IActionResult> CreateAdmin(RegisterDto model)
+        {
+            var result = await _authService.RegisterAsync(model, UserRole.Admin);
+            if (!result.Succeeded) return BadRequest(result.Errors);
+            return Ok();
         }
     }
 }

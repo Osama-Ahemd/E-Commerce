@@ -1,6 +1,7 @@
 using ECommerce.Configuration;
 using ECommerce.Data;
 using ECommerce.Data.Models;
+using ECommerce.Extensions;
 using ECommerce.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -71,8 +72,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-using var scope = app.Services.CreateScope();
-var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-await DataSeeder.SeedAsync(db, "Data/SeedData/Data.json");
+await app.SeedDatabaseAsync();
 
 app.Run();

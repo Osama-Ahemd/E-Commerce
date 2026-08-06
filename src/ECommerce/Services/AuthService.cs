@@ -11,21 +11,23 @@ namespace ECommerce.Services
 {
     public class AuthService(UserManager<User> userManager, JwtOptions jwtOptions) : IAuthService
     {
-        private readonly UserManager<User> _userManager = userManager;
-        private readonly JwtOptions _jwtOptions = jwtOptions;
+        private readonly UserManager<User> userManager = userManager;
+        private readonly JwtOptions jwtOptions = jwtOptions;
 
-        public async Task<IdentityResult> RegisterAsync(RegisterDto model)
+        public async Task<IdentityResult> RegisterAsync(RegisterDto model, UserRole role)
         {
-            var user = new User { UserName = model.UserName, Email = model.Email, FullName = model.UserName };
-            var result = await _userManager.CreateAsync(user, model.Password);
+            var user = new User { UserName = model.UserName, Email = model.Email, FullName = model.FullName };
+            var result = await userManager.CreateAsync(user, model.Password);
+            if (result.Succeeded)
+                await userManager.AddToRoleAsync(user, role.ToString());
             return result;
         }
 
         public async Task<string?> LoginAsync(UserLoginDto model)
         {
-            var user = await _userManager.FindByNameAsync(model.UserName);
+            var user = await userManager.FindByNameAsync(model.UserName);
             if (user == null) return null;
-            if (!await _userManager.CheckPasswordAsync(user, model.Password)) return null;
+            if (!await userManager.CheckPasswordAsync(user, model.Password)) return null;
 
             return GenerateJwtToken(user);
         }
@@ -34,7 +36,7 @@ namespace ECommerce.Services
         {
             var tokenHandler = new JwtSecurityTokenHandler();
 
-            var key = Encoding.UTF8.GetBytes(_jwtOptions.SigningKey ?? string.Empty);
+            var key = Encoding.UTF8.GetBytes(jwtOptions.SigningKey ?? string.Empty);
 
             var claims = new List<Claim>
             {
@@ -45,15 +47,17 @@ namespace ECommerce.Services
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Issuer = _jwtOptions.Issuer,
-                Audience = _jwtOptions.Audience,
+                Issuer = jwtOptions.Issuer,
+                Audience = jwtOptions.Audience,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddMinutes(_jwtOptions.Lifetime),
+                Expires = DateTime.UtcNow.AddMinutes(jwtOptions.Lifetime),
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
+
+
     }
 }

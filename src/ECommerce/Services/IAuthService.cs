@@ -1,3 +1,4 @@
+using ECommerce.Data.Models;
 using ECommerce.Dtos;
 using Microsoft.AspNetCore.Identity;
 
@@ -5,7 +6,7 @@ namespace ECommerce.Services
 {
     public interface IAuthService
     {
-        Task<IdentityResult> RegisterAsync(RegisterDto model);
+        Task<IdentityResult> RegisterAsync(RegisterDto model, UserRole role);
         Task<string?> LoginAsync(UserLoginDto model);
     }
 }
